@@ -13,7 +13,7 @@ Or simply
 cargo run
 ```
 
-## how to test
+## How to test
 
 ```
 cargo test
