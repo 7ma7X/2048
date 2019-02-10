@@ -1,6 +1,6 @@
-## 2048
+# 2048
 
-#### How to play
+## How to play
 
 ```
 cargo build
@@ -13,7 +13,7 @@ Or simply
 cargo run
 ```
 
-#### how to test
+## how to test
 
 ```
 cargo test
