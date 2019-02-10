@@ -144,6 +144,95 @@ impl Board {
       }
     }
   }
+  
+  fn move_left(&mut self) {
+    for i in 0..4 {
+      if self.board_data[i][0] == self.board_data[i][1] 
+      && self.board_data[i][2] == self.board_data[i][3] 
+      && self.board_data[i][0] != None
+      && self.board_data[i][2] != None
+      {
+        self.board_data[i][0] = self.board_data[i][0].map(|v| v*2);
+        self.board_data[i][1] = self.board_data[i][2].map(|v| v*2);
+        self.board_data[i][2] = None;
+        self.board_data[i][3] = None;
+
+        self.score += self.board_data[i][0].unwrap() + self.board_data[i][1].unwrap();
+      }
+      else
+      {
+        let mut is_renewed = false;
+        for j in 0..4 {
+          for k in (0..j).rev() {
+            match self.board_data[i][k+1] {
+              None => {}
+              Some(y) => {
+                match self.board_data[i][k] {
+                  None => {
+                    self.board_data[i][k] = Some(y);
+                    self.board_data[i][k+1] = None;
+                  }
+                  Some(x) => {
+                    if x == y && !is_renewed {
+                      self.board_data[i][k] = Some(2 * y);
+                      self.board_data[i][k+1] = None;
+                      self.score += 2 * y;
+                      is_renewed = true;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  fn move_right(&mut self) {
+    for i in 0..4 {
+      if self.board_data[i][0] == self.board_data[i][1] 
+      && self.board_data[i][2] == self.board_data[i][3] 
+      && self.board_data[i][0] != None
+      && self.board_data[i][2] != None
+      {
+        self.board_data[i][2] = self.board_data[i][1].map(|v| v*2);
+        self.board_data[i][3] = self.board_data[i][3].map(|v| v*2);
+        self.board_data[i][0] = None;
+        self.board_data[i][1] = None;
+
+        self.score += self.board_data[i][2].unwrap() + self.board_data[i][3].unwrap();
+      }
+      else
+      {
+        let mut is_renewed = false;
+        for j in (0..4).rev() {
+          for k in j..3 {
+            match self.board_data[i][k] {
+              None => {}
+              Some(y) => {
+                match self.board_data[i][k+1] {
+                  None => {
+                    self.board_data[i][k+1] = Some(y);
+                    self.board_data[i][k] = None;
+                  }
+                  Some(x) => {
+                    if x == y && !is_renewed {
+                      self.board_data[i][k+1] = Some(2 * y);
+                      self.board_data[i][k] = None;
+                      self.score += 2 * y;
+                      is_renewed = true;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
 }
 
 
@@ -278,5 +367,109 @@ fn check_move_down() {
     [Some(4), Some(2), Some(4), None], 
     [Some(64), Some(32), Some(64), Some(4)], 
     [Some(2), Some(4), Some(8), Some(4)]
+  ]);
+}
+
+#[test]
+fn check_move_left() {
+  let mut test_board = Board::initialize();
+  test_board.score = 8;
+  test_board.board_data = [
+    [None, None, None, None],
+    [Some(2), Some(2), None, None],
+    [Some(4), Some(4), None, None],
+    [Some(2), Some(2), Some(4), Some(2)]
+  ];
+  test_board.move_left();
+  assert_eq!(test_board.score, 24);
+  assert_eq!(test_board.board_data, [
+    [None, None, None, None], 
+    [Some(4), None, None, None], 
+    [Some(8), None, None, None], 
+    [Some(4), Some(4), Some(2), None]
+  ]);
+
+  test_board.score = 60;
+  test_board.board_data = [
+    [Some(2), Some(2), None, None],
+    [Some(2), Some(16), Some(2), None],
+    [Some(4), Some(8), Some(4), Some(4)],
+    [Some(2), Some(2), Some(2), Some(2)]
+  ];
+  test_board.move_left();
+  assert_eq!(test_board.score, 80);
+  assert_eq!(test_board.board_data, [
+    [Some(4), None, None, None], 
+    [Some(2), Some(16), Some(2), None], 
+    [Some(4), Some(8), Some(8), None], 
+    [Some(4), Some(4), None, None]
+  ]);
+
+  test_board.score = 276;
+  test_board.board_data = [
+    [Some(16), Some(4), Some(2), Some(4)],
+    [Some(2), Some(32), Some(8), Some(8)],
+    [Some(8), Some(8), Some(16), Some(2)],
+    [None, Some(4), Some(2), None]
+  ];
+  test_board.move_left();
+  assert_eq!(test_board.score, 308);
+  assert_eq!(test_board.board_data, [
+    [Some(16), Some(4), Some(2), Some(4)], 
+    [Some(2), Some(32), Some(16), None], 
+    [Some(16), Some(16), Some(2), None], 
+    [Some(4), Some(2), None, None]
+  ]);
+}
+
+#[test]
+fn check_move_right() {
+  let mut test_board = Board::initialize();
+  test_board.score = 72;
+  test_board.board_data = [
+    [Some(8), Some(8), Some(2), Some(2)],
+    [Some(4), Some(4), None, None],
+    [Some(16), None, None, None],
+    [None, None, Some(2), None]
+  ];
+  test_board.move_right();
+  assert_eq!(test_board.score, 100);
+  assert_eq!(test_board.board_data, [
+    [None, None, Some(16), Some(4)], 
+    [None, None, None, Some(8)], 
+    [None, None, None, Some(16)], 
+    [None, None, None, Some(2)]
+  ]);
+
+  test_board.score = 252;
+  test_board.board_data = [
+    [Some(2), Some(8), Some(4), Some(4)],
+    [Some(8), Some(16), Some(16), Some(2)],
+    [Some(32), Some(4), Some(4), Some(4)],
+    [Some(2), Some(2), Some(2), Some(2)]
+  ];
+  test_board.move_right();
+  assert_eq!(test_board.score, 308);
+  assert_eq!(test_board.board_data, [
+    [None, Some(2), Some(8), Some(8)], 
+    [None, Some(8), Some(32), Some(2)], 
+    [None, Some(32), Some(4), Some(8)], 
+    [None, None, Some(4), Some(4)]
+  ]);
+
+  test_board.score = 640;
+  test_board.board_data = [
+    [Some(4), Some(4), Some(2), Some(2)],
+    [Some(16), Some(16), Some(8), Some(8)],
+    [Some(4), Some(64), Some(32), Some(2)],
+    [Some(2), Some(16), Some(16), Some(4)]
+  ];
+  test_board.move_right();
+  assert_eq!(test_board.score, 732);
+  assert_eq!(test_board.board_data, [
+    [None, None, Some(8), Some(4)], 
+    [None, None, Some(32), Some(16)], 
+    [Some(4), Some(64), Some(32), Some(2)],
+    [None, Some(2), Some(32), Some(4)]
   ]);
 }
