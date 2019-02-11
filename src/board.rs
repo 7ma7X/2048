@@ -267,6 +267,91 @@ impl Board {
     }
   }
 
+  fn is_movable_row(row: [Option<i32>; 4]) -> bool {
+    match row {
+      [_      , None   , None,    None   ] => false,
+      [Some(a), Some(b), None,    None   ] 
+        if a != b                          => false,
+      [Some(a), Some(b), Some(c), None   ] 
+        if a != b && b != c                => false,
+      [Some(a), Some(b), Some(c), Some(d)] 
+        if a != b && b != c && c != d      => false,
+      _                                    => true
+    }
+  }
+
+  pub fn is_up_movable(&self) -> bool {
+    let mut ans = false;
+
+    for j in 0..4 {
+      let row = [
+        self.board_data[0][j],
+        self.board_data[1][j],
+        self.board_data[2][j],
+        self.board_data[3][j]
+      ];
+      if Board::is_movable_row(row) {
+        ans = true;
+        break;
+      }
+    }
+    ans
+  }
+
+  pub fn is_down_movable(&self) -> bool {
+    let mut ans = false;
+
+    for j in 0..4 {
+      let row = [
+        self.board_data[3][j],
+        self.board_data[2][j],
+        self.board_data[1][j],
+        self.board_data[0][j]
+      ];
+      if Board::is_movable_row(row) {
+        ans = true;
+        break;
+      }
+    }
+    ans
+  }
+
+  pub fn is_left_movable(&self) -> bool {
+    let mut ans = false;
+
+    for i in 0..4 {
+      let row = [
+        self.board_data[i][0],
+        self.board_data[i][1],
+        self.board_data[i][2],
+        self.board_data[i][3]
+      ];
+      if Board::is_movable_row(row) {
+        ans = true;
+        break;
+      }
+    }
+    ans
+  }
+
+  pub fn is_right_movable(&self) -> bool {
+    let mut ans = false;
+
+    for i in 0..4 {
+      let row = [
+        self.board_data[i][3],
+        self.board_data[i][2],
+        self.board_data[i][1],
+        self.board_data[i][0]
+      ];
+      if Board::is_movable_row(row) {
+        ans = true;
+        break;
+      }
+    }
+    ans
+  }
+  
 }
 
 
@@ -525,4 +610,120 @@ fn check_no_number_area() {
       (2, 3), (3, 1)
     ]
   );
+}
+
+#[test]
+fn check_movable_up() {
+  let mut test_board = Board::initialize();
+
+  test_board.board_data = [
+    [Some(2), Some(8), Some(16), Some(4)],
+    [None, Some(4), Some(8), Some(2)],
+    [None, None, Some(2), Some(8)],
+    [None, None, None, Some(2)]
+  ];
+  assert_eq!(test_board.is_up_movable(), false);
+
+  test_board.board_data = [
+    [Some(2), Some(8), Some(16), Some(2)],
+    [None, Some(4), Some(8), Some(2)],
+    [None, None, Some(2), Some(8)],
+    [None, None, None, Some(2)]
+  ];
+  assert_eq!(test_board.is_up_movable(), true);
+
+  test_board.board_data = [
+    [Some(2), Some(8), Some(16), None],
+    [None, Some(4), Some(8), Some(2)],
+    [None, None, Some(2), Some(8)],
+    [None, None, None, Some(2)]
+  ];
+  assert_eq!(test_board.is_up_movable(), true);
+}
+
+#[test]
+fn check_movable_down() {
+  let mut test_board = Board::initialize();
+
+  test_board.board_data = [
+    [None, None, None, Some(2)],
+    [None, None, None, Some(4)],
+    [None, None, Some(2), Some(16)],
+    [None, Some(4), Some(16), Some(32)]
+  ];
+  assert_eq!(test_board.is_down_movable(), false);
+
+  test_board.board_data = [
+    [None, None, None, Some(2)],
+    [None, None, None, Some(4)],
+    [None, None, Some(2), Some(4)],
+    [None, Some(4), Some(16), Some(32)]
+  ];
+  assert_eq!(test_board.is_down_movable(), true);
+
+  test_board.board_data = [
+    [None, None, None, Some(2)],
+    [None, None, None, Some(4)],
+    [None, None, Some(2), None],
+    [None, Some(4), Some(16), Some(32)]
+  ];
+  assert_eq!(test_board.is_down_movable(), true);
+}
+
+#[test]
+fn check_movable_left() {
+  let mut test_board = Board::initialize();
+
+  test_board.board_data = [
+    [Some(8), None, None, None],
+    [Some(4), Some(2), None, None],
+    [Some(16), Some(4), Some(2), None],
+    [Some(64), Some(16), Some(4), Some(2)]
+  ];
+  assert_eq!(test_board.is_left_movable(), false);
+
+  test_board.board_data = [
+    [Some(8), None, None, None],
+    [Some(4), Some(2), None, None],
+    [Some(16), Some(16), Some(2), None],
+    [Some(64), Some(16), Some(4), Some(2)]
+  ];
+  assert_eq!(test_board.is_left_movable(), true);
+
+  test_board.board_data = [
+    [Some(8), None, None, None],
+    [Some(4), Some(2), None, None],
+    [Some(16), None, Some(2), None],
+    [Some(64), Some(16), Some(4), Some(2)]
+  ];
+  assert_eq!(test_board.is_left_movable(), true);
+}
+
+#[test]
+fn check_movable_right() {
+  let mut test_board = Board::initialize();
+
+  test_board.board_data = [
+    [None, None, None, Some(4)],
+    [None, None, Some(4), Some(8)],
+    [None, Some(4), Some(8), Some(4)],
+    [Some(2), Some(8), Some(16), Some(128)]
+  ];
+  assert_eq!(test_board.is_right_movable(), false);
+
+  test_board.board_data = [
+    [None, None, None, Some(4)],
+    [None, None, Some(4), Some(8)],
+    [None, Some(4), Some(8), Some(4)],
+    [Some(2), Some(8), Some(16), Some(16)]
+  ];
+  assert_eq!(test_board.is_right_movable(), true);
+
+  test_board.board_data = [
+    [None, None, None, Some(4)],
+    [None, None, Some(4), Some(8)],
+    [None, Some(4), Some(8), Some(4)],
+    [Some(2), Some(8), Some(16), None]
+  ];
+  assert_eq!(test_board.is_right_movable(), true);
 }
