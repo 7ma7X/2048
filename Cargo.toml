@@ -5,3 +5,4 @@ authors = ["7ma7X <7X.rusk@gmail.com>"]
 
 [dependencies]
 colored = "1.7"
+rand = "0.6"

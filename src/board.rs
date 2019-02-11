@@ -1,6 +1,9 @@
 extern crate colored;
+extern crate rand;
 
 use colored::Colorize;
+use rand::thread_rng;
+use rand::seq::SliceRandom;
 
 pub struct Board {
   score: i32,
@@ -24,6 +27,33 @@ impl Board {
       }
       println!("");
     }
+  }
+
+  fn fetch_no_number_area(&self) -> Vec<(usize, usize)> {
+    let mut ans = Vec::new();
+
+    for i in 0..4 {
+      for j in 0..4 {
+        if self.board_data[i][j] == None {
+          ans.push((i, j));
+        }
+      }
+    }
+    ans
+  }
+
+  fn generate_two_or_four() -> i32 {
+    let choices: [i32; 4] = [2, 2, 2, 4];
+    let mut rng = thread_rng();
+
+    *choices.choose(&mut rng).unwrap()
+  }
+
+  pub fn fill_in_board(&mut self) {
+    let no_number_vec = Board::fetch_no_number_area(self);
+    let mut rng = thread_rng();
+    let (x, y) = *no_number_vec.choose(&mut rng).unwrap();
+    self.board_data[x][y] = Some(Board::generate_two_or_four());
   }
 
   fn is_continuable(&self) -> bool {
@@ -472,4 +502,23 @@ fn check_move_right() {
     [Some(4), Some(64), Some(32), Some(2)],
     [None, Some(2), Some(32), Some(4)]
   ]);
+}
+
+#[test]
+fn check_no_number_area() {
+  let mut test_board = Board::initialize();
+
+  test_board.board_data = [
+    [None, None, None, None],
+    [Some(2), Some(2), None, None],
+    [None, Some(4), None, None],
+    [Some(2), None, Some(4), Some(2)]
+  ];
+  assert_eq!(test_board.fetch_no_number_area(),
+    vec![
+      (0, 0), (0, 1), (0, 2), (0, 3),
+      (1, 2), (1, 3), (2, 0), (2, 2),
+      (2, 3), (3, 1)
+    ]
+  );
 }
