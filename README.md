@@ -1,6 +1,6 @@
 # 2048
 
-<img src="https://user-images.githubusercontent.com/36184621/52547010-6a9f8a00-2e07-11e9-9fc6-8bddbb2b0587.gif" width="600">
+<img src="https://user-images.githubusercontent.com/36184621/52550849-43ec4e00-2e1d-11e9-90b0-2384aab813ca.gif" width="600">
 
 ## How to play
 
