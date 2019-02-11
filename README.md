@@ -26,16 +26,16 @@ if you want to change this keybind, please modify the conditions in `src/main.rs
 
 ```rs
   if input.starts_with("i") || input.starts_with("I") {
-    ...
+    // move up
 
   } else if input.starts_with("m") || input.starts_with("M") {
-    ...
+    // move down
 
   } else if input.starts_with("j") || input.starts_with("J") {
-    ...
+    // move left
 
   } else if input.starts_with("k") || input.starts_with("K") {
-...
+    // move right
 ```
 
 ## How to test
