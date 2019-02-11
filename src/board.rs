@@ -34,9 +34,7 @@ impl Board {
 
     for i in 0..4 {
       for j in 0..4 {
-        if self.board_data[i][j] == None {
-          ans.push((i, j));
-        }
+        if self.board_data[i][j] == None { ans.push((i, j)); }
       }
     }
     ans
@@ -49,14 +47,20 @@ impl Board {
     *choices.choose(&mut rng).unwrap()
   }
 
-  pub fn fill_in_board(&mut self) {
+  pub fn fill_in(&mut self) {
     let no_number_vec = Board::fetch_no_number_area(self);
     let mut rng = thread_rng();
-    let (x, y) = *no_number_vec.choose(&mut rng).unwrap();
-    self.board_data[x][y] = Some(Board::generate_two_or_four());
+
+    match no_number_vec.choose(&mut rng) {
+      Some(tuple) => {
+        let (x, y) = *tuple;
+        self.board_data[x][y] = Some(Board::generate_two_or_four());
+      }
+      None => {}
+    }
   }
 
-  fn is_continuable(&self) -> bool {
+  pub fn is_continuable(&self) -> bool {
     let mut ans = false;
 
     for i in 0..3 {
@@ -85,7 +89,7 @@ impl Board {
     ans
   }
 
-  fn move_up(&mut self) {
+  pub fn move_up(&mut self) {
     for j in 0..4 {
       // pattern [a, a, b, b] => [2a, 2b, -, -]
       // only this pattern can board be renewed twice, otherwise once
@@ -131,7 +135,7 @@ impl Board {
     }
   }
 
-  fn move_down(&mut self) {
+  pub fn move_down(&mut self) {
     for j in 0..4 {
       if self.board_data[0][j] == self.board_data[1][j] 
       && self.board_data[2][j] == self.board_data[3][j] 
@@ -175,7 +179,7 @@ impl Board {
     }
   }
   
-  fn move_left(&mut self) {
+  pub fn move_left(&mut self) {
     for i in 0..4 {
       if self.board_data[i][0] == self.board_data[i][1] 
       && self.board_data[i][2] == self.board_data[i][3] 
@@ -219,7 +223,7 @@ impl Board {
     }
   }
 
-  fn move_right(&mut self) {
+  pub fn move_right(&mut self) {
     for i in 0..4 {
       if self.board_data[i][0] == self.board_data[i][1] 
       && self.board_data[i][2] == self.board_data[i][3] 
