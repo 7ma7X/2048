@@ -1,5 +1,7 @@
 # 2048
 
+<img src="https://user-images.githubusercontent.com/36184621/52547010-6a9f8a00-2e07-11e9-9fc6-8bddbb2b0587.gif" width="400">
+
 ## How to play
 
 ```
