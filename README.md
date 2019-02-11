@@ -24,7 +24,7 @@ cargo run
 
 if you want to change this keybind, please modify the conditions in `src/main.rs` listed below...
 
-```rs
+```rust
   if input.starts_with("i") || input.starts_with("I") {
     // move up
 
