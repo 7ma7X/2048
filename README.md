@@ -11,6 +11,10 @@ cargo build
 
 Or simply
 
+```
+cargo run
+```
+
 |  KEY  |  manipulation  |
 | ---- | ---- |
 |  i / I |  move up  |
