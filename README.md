@@ -4,12 +4,21 @@
 
 ## How to play
 
+First, clone this repository
+
+```
+git clone https://github.com/7ma7X/2048.git
+cd 2048
+```
+
+To start game,
+
 ```
 cargo build
 ./target/debug/rust2048
 ```
 
-Or simply
+or simply
 
 ```
 cargo run
