@@ -79,10 +79,10 @@ impl Board {
           Some(x) => {
             match self.board_data[j][i+1] {
               Some(y) => if x == y { ans = true; break; },
-              None => {}
+              None => { ans = true; break; }
             }
           }
-          None => {}          
+          None => { ans = true; break; }          
         }
       }
     }
