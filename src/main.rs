@@ -41,12 +41,12 @@ fn main() {
             board.display();
           }
         } else {
-          println!("error: {}", "invalid input");
+          println!("error: invalid input");
         }
       }
       Err(error) => println!("error: {}", error),
     }
   }
                           
-  println!("{}", "GAME OVER");
+  println!("GAME OVER");
 }
