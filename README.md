@@ -11,9 +11,12 @@ cargo build
 
 Or simply
 
-```
-cargo run
-```
+|  KEY  |  manipulation  |
+| ---- | ---- |
+|  i / I |  move up  |
+|  m / M |  move down  |
+|  j / J |  move left  |
+|  k / K |  move right  |
 
 ## How to test
 

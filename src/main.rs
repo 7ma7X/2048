@@ -16,19 +16,19 @@ fn main() {
     let mut input = String::new();
     match stdin().read_line(&mut input) {
       Ok(_n) => {
-        if input.starts_with("i") {
+        if input.starts_with("i") || input.starts_with("I") {
           board.move_up();
           board.fill_in();
           board.display();
-        } else if input.starts_with("m") {
+        } else if input.starts_with("m") || input.starts_with("M") {
           board.move_down();
           board.fill_in();
           board.display();
-        } else if input.starts_with("j") {
+        } else if input.starts_with("j") || input.starts_with("J") {
           board.move_left();
           board.fill_in();
           board.display();
-        } else if input.starts_with("k") {
+        } else if input.starts_with("k") || input.starts_with("K") {
           board.move_right();
           board.fill_in();
           board.display();
